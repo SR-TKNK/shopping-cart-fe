@@ -20,12 +20,6 @@ export const Landing = (props) => {
         </Navbar.Brand>
       </Navbar>
       <Container className="mt-4">
-        {/* <Row>
-          <Col className="mt-4">
-          <h2>Hello!</h2>
-          <Alert variant={'primary'}>If you have the FastAPI backend and MongoDB running, then just create a new user account using the registration form and enter the web application.</Alert>
-          </Col>
-        </Row> */}
         <Row>
           <Col lg={{ span: 6, offset: 3 }} md={{ span: 6, offset: 3 }} sm={{ span: 6, offset: 3 }} className="mt-4">
             <Login {...props}/>

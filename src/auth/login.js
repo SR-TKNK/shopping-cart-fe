@@ -12,7 +12,11 @@ const useStyles = makeStyles(() => ({
     textAlign: "center",
   },
   btn_signin:{
-    paddingTop: 60,
+    paddingTop: 30,
+    textAlign: "center",
+  },
+  alert_signin:{
+    marginTop: 30,
     textAlign: "center",
   },
 }));
@@ -83,6 +87,7 @@ export const Login = () => {
         </Button>
       </div>
       <Alert
+        className={classes.alert_signin}
         variant="danger"
         style={error !== "" ? { display: "block" } : { display: "none" }}
       >

@@ -16,25 +16,22 @@ export const Home = (props) => {
   const [current, setCurrent] = useState(null);
   // User information hook
   const [user, setUser] = useState({
-    id: "",
-    email: "",
-    is_active: true,
-    is_superuser: false,
+    userId: "",
+    email: "",  
+    isVIP: false,
     firstName: "",
     lastName: "",
   });
 
   // const url = "ws://localhost:8000/add-item";
   // const url = "wss://server-srtknk-cxnam-ews.education.wise-paas.com/add-item";
-  const [ws, setWs] = useState(null);
+  // const [ws, setWs] = useState(null);
 
   // Fetch user information on page load
   useEffect(() => {
     const fetchData = async () => {
       if (auth.isAuthenticated()) {
-        const result = await auth.getUser();
-        console.log("Hey" + result);
-        setUser(result);
+        await auth.getUser(setUser);
       }
     };
     fetchData();
@@ -45,7 +42,7 @@ export const Home = (props) => {
   const callLogout = async () => {
     auth.logout(() => {
       history.push("/");
-    }, ws);
+    });
   };
 
   return (
@@ -92,8 +89,6 @@ export const Home = (props) => {
               setCurrent={setCurrent}
               order={order}
               setOrder={setOrder}
-              ws={ws}
-              setWs={setWs}
             />
           </Col>
         </Row>

@@ -11,11 +11,11 @@ function App() {
     <BrowserRouter>
       <div  className="App">
         <ProtectedRoute 
-            path='/'
-            exact 
-            strict
-            component = {Home}
-          />
+          path='/'
+          exact 
+          strict
+          component = {Home}
+        />
         {/* <Route 
             path='/anotherpage'
             exact 

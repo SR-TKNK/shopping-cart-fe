@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ListOrder({ current, setCurrent, order, setOrder, ws, setWs }) {
+function ListOrder({ current, setCurrent, order, setOrder}) {
   const classes = useStyles();
   // const [total, setTotal] = useState(0);
   const hasErrors = false;
@@ -52,7 +52,7 @@ function ListOrder({ current, setCurrent, order, setOrder, ws, setWs }) {
   const socketRef = useRef();
 
   useEffect(() => {
-    const url = "ws://localhost:8000/add-item";
+    const url = "ws://localhost:8080/add-item";
     // const url = "wss://server-srtknk-cxnam-ews.education.wise-paas.com/add-item";
     socketRef.current = new WebSocket(url);
     // return() => {
