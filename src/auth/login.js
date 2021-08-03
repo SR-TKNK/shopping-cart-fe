@@ -11,11 +11,11 @@ const useStyles = makeStyles(() => ({
   root: {
     textAlign: "center",
   },
-  btn_signin:{
+  btn_signin: {
     paddingTop: 30,
     textAlign: "center",
   },
-  alert_signin:{
+  alert_signin: {
     marginTop: 30,
     textAlign: "center",
   },

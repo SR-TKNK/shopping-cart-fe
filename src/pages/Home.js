@@ -17,7 +17,7 @@ export const Home = (props) => {
   // User information hook
   const [user, setUser] = useState({
     userId: "",
-    email: "",  
+    email: "",
     isVIP: false,
     firstName: "",
     lastName: "",
@@ -31,7 +31,8 @@ export const Home = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       if (auth.isAuthenticated()) {
-        await auth.getUser(setUser);
+        const data = await auth.getUser();
+        setUser(data);
       }
     };
     fetchData();

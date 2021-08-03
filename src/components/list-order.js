@@ -52,7 +52,7 @@ function ListOrder({ current, setCurrent, order, setOrder}) {
   const socketRef = useRef();
 
   useEffect(() => {
-    const url = "ws://localhost:8080/add-item";
+    const url = "ws://localhost:8000/add-item";
     // const url = "wss://server-srtknk-cxnam-ews.education.wise-paas.com/add-item";
     socketRef.current = new WebSocket(url);
     // return() => {
@@ -100,7 +100,7 @@ function ListOrder({ current, setCurrent, order, setOrder}) {
         )}
         {!hasErrors && (
           <GridList
-            onChange={`handleChange`}
+            // onChange={handleChange}
             className={classes.gridList}
             cols={1}
           >

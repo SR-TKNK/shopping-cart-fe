@@ -1,44 +1,45 @@
 // import decodeJwt from "jwt-decode";
-import axios from 'axios';
-import isEmail from 'validator/lib/isEmail';
+import axios from "axios";
+import isEmail from "validator/lib/isEmail";
 
 class Auth {
   login = async (email, password) => {
-    // Assert email is not empty  
+    // Assert email is not empty
     if (!(email.length > 0) || !(password.length > 0) || !isEmail(email)) {
       throw new Error("QR-Code is invalid!");
     }
     const url = "http://localhost:8080/auth/login";
     // const url = "ttps://server-srtknk-cxnam-ews.education.wise-paas.com/auth/login";
 
-    axios.post(url, {"email": email, "password" : password})
-    .then((response) => {
-      console.log(response);
-      // 500 error handling
-      if (response.status === 500) {
-        throw new Error("Internal server error");
+    const response = await axios.post(url, {
+      email: email,
+      password: password,
+    });
+    console.log(response);
+    // 500 error handling
+    if (response.status === 500) {
+      throw new Error("Internal server error");
+    }
+    // Extracting response data
+    const data = await response.data;
+    // 400 error handling
+    if (response.status >= 400 && response.status < 500) {
+      if (data.detail) {
+        throw data.detail;
       }
-      // Extracting response data
-      const data = response.data;
-      // 400 error handling
-      if (response.status >= 400 && response.status < 500) {
-        if (data.detail) {
-          throw data.detail;
-        }
-        throw data;
-      }
-      // Successful login handling
-      if (data["token"]) {
-        // eslint-disable-next-line
-        // const decodedToken = decodeJwt(data["token"]);
-        localStorage.setItem("token", data["token"]);
-        localStorage.setItem("permissions", "user");
-        localStorage.setItem("email", data["email"]);
-      }
-      return data;
-    })
+      throw data;
+    }
+    // Successful login handling
+    if (data["token"]) {
+      // eslint-disable-next-line
+      // const decodedToken = decodeJwt(data["token"]);
+      localStorage.setItem("token", data["token"]);
+      localStorage.setItem("permissions", "user");
+      localStorage.setItem("email", data["email"]);
+    }
+    return data;
   };
-  
+
   logout = (callback) => {
     localStorage.removeItem("token");
     localStorage.removeItem("permissions");
@@ -51,15 +52,16 @@ class Auth {
     callback();
   };
 
-  getUser = async (callback) => {
+  getUser = async () => {
     const url = "http://localhost:8080/auth/users/me";
     // const url = "https://server-srtknk-cxnam-ews.education.wise-paas.com/auth/users/me";
 
-    axios.post(url, {"token": localStorage.getItem("token"), "email" : localStorage.getItem("email")})
-    .then((response) => {
-      // console.log(response.data);
-      callback(response.data);
-    })
+    const response = await axios.post(url, {
+      token: localStorage.getItem("token"),
+      email: localStorage.getItem("email"),
+    });
+    const data = await response.data;
+    return data;
   };
 
   isAuthenticated = () => {
