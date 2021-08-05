@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ListOrder({ current, setCurrent, order, setOrder}) {
+function ListOrder({ current, setCurrent, order, setOrder }) {
   const classes = useStyles();
   // const [total, setTotal] = useState(0);
   const hasErrors = false;
@@ -52,25 +52,35 @@ function ListOrder({ current, setCurrent, order, setOrder}) {
   const socketRef = useRef();
 
   useEffect(() => {
-    const url = "ws://localhost:8000/add-item";
-    // const url = "wss://server-srtknk-cxnam-ews.education.wise-paas.com/add-item";
+    // const url = "ws://localhost:8000/item";
+    const url = "wss://server-shopping-cart-srtknk-cxnam-ews.education.wise-paas.com/item";
     socketRef.current = new WebSocket(url);
-    // return() => {
-    //   socketRef.current.close();
-    // }
+    return() => {
+      socketRef.current.close();
+    }
     // eslint-disable-next-line
-  },[]);
+  }, []);
   useEffect(() => {
     if (!socketRef.current) return;
     socketRef.current.onmessage = (message) => {
-      const data =  JSON.parse(message.data);
-      console.log(data);
-      setCurrent(data);
-      setOrder((order) => [...order, data]);
-    }
+      const data = JSON.parse(message.data);
+      if (data) {
+        if (data.message === "add") {
+          setCurrent(data);
+          setOrder((order) => [...order, data]);        
+        } 
+        else if (data.message === "delete") {
+          alert(`Product ${data.code} has been remove!`);
+          // console.log(order[0]);
+          setCurrent(null);
+          const temp = order.filter(item => item.code !== data.code);          
+          setOrder(temp);
+        }
+      }
+    };
     // eslint-disable-next-line
-  }, [])
-  
+  }, [order]);
+
   const handlePurchase = async () => {
     try {
       const data = await auth.sendOrder(order);
@@ -83,9 +93,7 @@ function ListOrder({ current, setCurrent, order, setOrder}) {
   };
 
   const handleClickItem = (item) => {
-    console.log(item);
     setCurrent(item);
-    console.log(current);
   };
 
   return (
@@ -158,14 +166,6 @@ function ListOrder({ current, setCurrent, order, setOrder}) {
             >
               Purchase
             </Button>
-            {/* <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              onClick={addItem}
-            >
-              Reload
-            </Button> */}
           </Typography>
         </CardContent>
       </Card>

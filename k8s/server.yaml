@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-srtknk
+  name: shopping-cart-srtknk
   labels:
-    name: frontend
+    name: shopping-cart-srtknk
 spec:
   replicas: 1
   revisionHistoryLimit: 0
   selector:
     matchLabels:
-      component: frontend
+      component: shopping-cart-srtknk
   template:
     metadata:
       labels:
-        component: frontend
+        component: shopping-cart-srtknk
     spec:
       containers:
-        - name: frontend
-          image: anhiuem492/frontend-srtknk:frontend
+        - name: shopping-cart-srtknk
+          image: anhiuem492/server-srtknk:shopping-cart
           imagePullPolicy: Always
           ports:
             - containerPort: 80
