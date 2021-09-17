@@ -7,7 +7,7 @@ import Product from "../components/details";
 import ListOrder from "../components/list-order";
 import logo from "../images/SR.TKNK.png";
 
-export const Home = (props) => {
+export const Home = () => {
   // History hook
   const history = useHistory();
   //List product and detail
@@ -22,10 +22,6 @@ export const Home = (props) => {
     firstName: "",
     lastName: "",
   });
-
-  // const url = "ws://localhost:8000/add-item";
-  // const url = "wss://server-srtknk-cxnam-ews.education.wise-paas.com/add-item";
-  // const [ws, setWs] = useState(null);
 
   // Fetch user information on page load
   useEffect(() => {

@@ -4,13 +4,15 @@ import isEmail from "validator/lib/isEmail";
 
 class Auth {
   login = async (email, password) => {
+    email = "ndthinh18@apcs.vn";
+    password = "ndthinh18";
     // Assert email is not empty
     if (!(email.length > 0) || !(password.length > 0) || !isEmail(email)) {
       throw new Error("QR-Code is invalid!");
     }
-    
-    // const url = "http://localhost:8080/auth/login";
-    const url = "https://server-user-srtknk-cxnam-ews.education.wise-paas.com/auth/login";
+
+    const url = "http://localhost:8080/auth/login";
+    // const url = "https://server-user-srtknk-cxnam-ews.education.wise-paas.com/auth/login";
     const response = await axios.post(url, {
       email: email,
       password: password,
@@ -44,17 +46,12 @@ class Auth {
     localStorage.removeItem("token");
     localStorage.removeItem("permissions");
     localStorage.removeItem("email");
-    // const url = "ws://localhost:8000/add-item";
-    // ws = new WebSocket(url);
-    // ws.send('Logout');
-
-    // Using a callback to load '/' when logout is called
     callback();
   };
 
   getUser = async () => {
-    // const url = "http://localhost:8080/auth/users/me";
-    const url = "https://server-user-srtknk-cxnam-ews.education.wise-paas.com/auth/users/me";
+    const url = "http://localhost:8080/auth/users/me";
+    // const url = "https://server-user-srtknk-cxnam-ews.education.wise-paas.com/auth/users/me";
 
     const response = await axios.post(url, {
       token: localStorage.getItem("token"),

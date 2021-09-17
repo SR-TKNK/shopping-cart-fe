@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Paper,
   Typography,
@@ -44,42 +44,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+let total = 0;
 function ListOrder({ current, setCurrent, order, setOrder }) {
   const classes = useStyles();
-  // const [total, setTotal] = useState(0);
   const hasErrors = false;
 
   const socketRef = useRef();
-
+  const url = "ws://localhost:8000/item";
+  // const url = "wss://server-shopping-cart-srtknk-cxnam-ews.education.wise-paas.com/item";
   useEffect(() => {
-    // const url = "ws://localhost:8000/item";
-    const url = "wss://server-shopping-cart-srtknk-cxnam-ews.education.wise-paas.com/item";
     socketRef.current = new WebSocket(url);
-    return() => {
-      socketRef.current.close();
-    }
-    // eslint-disable-next-line
-  }, []);
-  useEffect(() => {
+
     if (!socketRef.current) return;
     socketRef.current.onmessage = (message) => {
       const data = JSON.parse(message.data);
       if (data) {
+        console.log(data);
         if (data.message === "add") {
           setCurrent(data);
-          setOrder((order) => [...order, data]);        
-        } 
-        else if (data.message === "delete") {
+          console.log(order);
+          setOrder((order) => [...order, data]);
+          console.log(total);
+          total += data.price;
+        } else if (data.message === "delete") {
           alert(`Product ${data.code} has been remove!`);
-          // console.log(order[0]);
           setCurrent(null);
-          const temp = order.filter(item => item.code !== data.code);          
+          const temp = order.filter((item) => item.code !== data.code);
           setOrder(temp);
+          console.log(total);
+          total -= data.price;
         }
       }
     };
+    socketRef.current.onclose = () => {
+      console.log("End WebSocket");
+      return () => {
+        socketRef.current.close();
+      };
+    };
+
     // eslint-disable-next-line
-  }, [order]);
+  }, [total]);
 
   const handlePurchase = async () => {
     try {
@@ -114,13 +119,13 @@ function ListOrder({ current, setCurrent, order, setOrder }) {
           >
             <Table className={classes.table}>
               {/* <TableHead>
-            <TableRow>
-              <TableCell>Order Id</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Total Items</TableCell>
-              <TableCell>Cost</TableCell>
-            </TableRow>
-          </TableHead> */}
+                <TableRow>
+                  <TableCell>Order Id</TableCell>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Total Items</TableCell>
+                  <TableCell>Cost</TableCell>
+                </TableRow>
+              </TableHead> */}
               <TableBody>
                 {order.map((item) => (
                   <TableRow
@@ -156,6 +161,7 @@ function ListOrder({ current, setCurrent, order, setOrder }) {
             <Box textAlign="left" m={1}>
               <strong>Total</strong>
             </Box>
+            <div>{total}</div>
           </Typography>
           <Typography>
             <Button
