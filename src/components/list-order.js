@@ -14,6 +14,7 @@ import {
   Button,
   CardMedia,
 } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 // import axios from "axios";
 import auth from "../auth/auth";
 
@@ -28,7 +29,10 @@ const useStyles = makeStyles((theme) => ({
   rootTotal: {
     // display: "flex",
     // flexWrap: "wrap",
-    height: 120,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     backgroundColor: "#F5F5F5",
   },
   gridList: {
@@ -48,6 +52,7 @@ let total = 0;
 function ListOrder({ current, setCurrent, order, setOrder }) {
   const classes = useStyles();
   const hasErrors = false;
+  const history = useHistory();
 
   const socketRef = useRef();
   const url = "ws://localhost:8000/item";
@@ -92,6 +97,7 @@ function ListOrder({ current, setCurrent, order, setOrder }) {
       if (data) {
         console.log(data);
       }
+      history.push("/payment");
     } catch (err) {
       console.log(err);
     }

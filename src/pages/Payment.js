@@ -5,9 +5,14 @@ import QrReader from "react-qr-reader";
 import "../App.css";
 import { makeStyles, Button } from "@material-ui/core";
 import { Alert } from "react-bootstrap";
-import auth from "./auth";
+import auth from "../auth/auth";
 
 const useStyles = makeStyles(() => ({
+  content: {
+    width: '50%',
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
   root: {
     textAlign: "center",
   },
@@ -21,8 +26,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const Login = () => {
+export const Payment = (location) => {
   const classes = useStyles();
+  const order = location.state;
+  console.log(order);
   // History hook
   const history = useHistory();
 
@@ -30,13 +37,14 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isSuccess, setIsSuccess] = useState(null);
 
   const handleScan = (value) => {
     if (value) {
       let result = value.split(",");
       setEmail(result[0]);
       setPassword(result[1]);
-      alert("Take an account");
+      setIsSuccess(true);
       setError("");
     }
   };
@@ -73,26 +81,37 @@ export const Login = () => {
   };
 
   return (
-    <>
-      <h2 className={classes.root}>Login</h2>
-      <QrReader
-        delay={200}
-        onError={handleError}
-        onScan={handleScan}
-        style={{ width: "100%" }}
-      />
-      <div className={classes.btn_signin}>
-        <Button onClick={handleSubmit} variant="contained" color="secondary">
-          SIGN IN
-        </Button>
+    <div className={classes.container}>
+      <div className={classes.content}>
+        <h2 className={classes.root}>Payment</h2>
+        {isSuccess == true ? (
+          <h2 style={{ textAlign: 'center' }}>
+            Thanh toán thành công!
+          </h2>
+        ) : (
+          <div>
+            <QrReader
+              delay={200}
+              onError={handleError}
+              onScan={handleScan}
+              style={{ width: "100%" }}
+            />
+            <div className={classes.btn_signin}>
+              <Button onClick={handleSubmit} variant="contained" color="secondary">
+                PAYMENT BY SCANNING QR CODE
+              </Button>
+            </div>
+          </div>
+        )}
+
+        <Alert
+          className={classes.alert_signin}
+          variant="danger"
+          style={error !== "" ? { display: "block" } : { display: "none" }}
+        >
+          {error}
+        </Alert>
       </div>
-      <Alert
-        className={classes.alert_signin}
-        variant="danger"
-        style={error !== "" ? { display: "block" } : { display: "none" }}
-      >
-        {error}
-      </Alert>
-    </>
+    </div>
   );
 };

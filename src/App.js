@@ -1,16 +1,19 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Home } from "./pages/Home";
+import { Payment } from "./pages/Payment";
 import { ProtectedRoute } from "./auth/protected-route";
 import "./App.css";
+
 
 function App() {
   return (
     // Router Code
     <BrowserRouter>
       <div className="App">
-        <ProtectedRoute path="/" exact strict component={Home} />
+        <Route path="/" exact strict component={Home} />
+        <Route path="/payment" exact strict component={Payment} />
         {/* <Route 
             path='/anotherpage'
             exact 
